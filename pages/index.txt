@@ -1,0 +1,44 @@
+import Cookies from "js-cookie"
+const jwt = require('jsonwebtoken')
+import axios from "axios"
+import { use, useState } from "react"
+import Chat from "../Component/Chat"
+import Chatbox from "../Component/chatbox"
+import styles from '../../styles/Dashboard.module.css'
+
+export default function Inicio(){
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [chat,setChat]= useState(false)
+    let username
+    var coockie = Cookies.get('NextCoockie')
+    if (coockie){
+        axios.post('/api/login',{token:coockie}).then(response =>{
+            const auth =response.data.auth
+            username = response.data.dados
+            if(auth){
+                setIsAuthenticated(true)
+            }
+    })
+    }
+    const chatFunc=()=>{
+        setChat(true)
+    }
+    if(isAuthenticated){
+    return (
+        <>
+    <div className={styles.serviceContainer}>
+        </div>
+        <div onClick={chatFunc}>
+        <Chat/>
+        </div>
+        { chat &&(
+            <Chatbox user={username}/>
+        )}
+        </>
+    )}
+    else{
+        return(
+            <h1>Privado</h1>
+        )
+    }
+}

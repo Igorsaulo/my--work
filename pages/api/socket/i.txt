@@ -1,0 +1,21 @@
+import { Server } from "socket.io";
+
+export default function SocketHandler(req, res) {
+  if (res.socket.server.io) {
+    console.log('Socket is already running')
+  } else {
+    console.log('Socket is initializing')
+    const io = new Server(res.socket.server)
+    res.socket.server.io = io
+    io.on('connection', socket => {
+      socket.on('input-change', msg => {
+        console.log('my msg serv',msg)
+        socket.emit('input-change',{ message:msg,user:'other'})
+      }).on("error", (error) => {
+        console.error("Error on socket connection:", error)
+      })
+    })
+  }
+  res.end();
+}
+//      setMessages((prevMessages) => [...prevMessages,inputRef.current.value]);

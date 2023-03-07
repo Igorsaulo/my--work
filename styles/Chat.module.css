@@ -1,0 +1,38 @@
+.chat{
+    display: flex;
+    position: fixed;
+    width: 15%;
+    right: 0px;
+    background-color: rgb(209, 206, 206);
+    min-height: 90%;
+    bottom: 0px;
+    border-left: 1px solid rgb(139, 139, 139);
+    border-radius: 5px;
+    flex-direction: column;
+}
+.chatHeader{
+    text-align: center;
+    justify-content: center;
+    background-color: rgb(243, 238, 238);
+    border: 1px solid rgb(139, 139, 139);
+}
+.userBox{
+    display: flex;
+    margin: 10px;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+}
+
+.chatBox{
+    width: 200px;
+    height: 300px;
+    position: fixed;
+    bottom: 0px;
+    right: 16%;
+    background-color: white;
+    border: 2px solid black;
+    justify-content: flex-end;
+    flex-direction: column;
+    display: flex;
+}
