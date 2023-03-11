@@ -5,12 +5,12 @@ import { useRouter } from "next/router";
 
 export default function Resgister(){
     const router = useRouter();
-
     const {register, handleSubmit} = useForm()
+    
     const onSubmit = (data,e)=>{
         if (data.password === data.confirmpassword){
             console.log('ok')
-            axios.post('api/user',data).then(response=>{
+            axios.post('api/register',data).then(response=>{
                 if(response.data){
                     axios.post('api/enter').then(responsetwo=>{
                         console.log(responsetwo.data.token)
@@ -19,10 +19,6 @@ export default function Resgister(){
                 }
             })
             router.push('/')
-
-        }
-        else{
-            console.log('errou')
         }
     }
     return (

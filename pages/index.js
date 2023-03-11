@@ -11,11 +11,11 @@ export default function Home(){
   const router = useRouter();
   const { register, handleSubmit } = useForm();
   function push(){
-    router.push('/dashboard')
+    router.push('/inicio')
   }
 
   async function handleSigIn(data){
-    axios.post('/api/enter', data).then(response => {
+    axios.post('/api/auth', data).then(response => {
       console.log(response.data.token);
       setCookie(response.data.token)
     });
