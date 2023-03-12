@@ -23,7 +23,7 @@ export default async function Users (req,res){
             const secret = process.env.SECRET
             const token = jwt.sign(
                 {
-                    id:user._id,
+                    id:user.id,
                     username:user.username,
                 },
                 secret,
@@ -35,4 +35,4 @@ export default async function Users (req,res){
             console.log(error)
         }
     }
-};s
+};

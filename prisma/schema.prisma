@@ -16,14 +16,17 @@ model Users {
 
 model Friends {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
-  friendid String
-  userid   String
+  friendid String @db.ObjectId
+  userid   String @db.ObjectId
   blocked  String
 }
 
-model Photos {
+model Photo {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   photo  String 
+}
+model ProfilePhoto{
+   id     String @id @map("_id") @db.ObjectId
   profilephoto String
 }
