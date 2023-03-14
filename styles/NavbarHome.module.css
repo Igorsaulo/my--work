@@ -1,0 +1,29 @@
+.navbarhome{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+    position: fixed;
+    align-items: center;
+    background-color: #ffb3b3;
+    z-index: 2;
+    border-bottom: 1px solid #c04f4f;
+    color: #820A0A;
+}
+.navbarhome div{
+    margin-left:40px ;
+    margin-right: 40px;
+}
+.signbtn{
+    font-size: 20px;
+    background-color: #820A0A;
+    color: #ee8585;
+    padding: 5px;
+    width: 10vw;
+    text-align: center;
+    border-radius: 5px;
+}
+.signbtn:hover{
+    background-color: #550202;
+    color: #c45f5f;
+}

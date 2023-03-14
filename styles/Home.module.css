@@ -5,9 +5,73 @@
 .main {
   min-height: 900px;
   display: flex;
-  flex-direction: column;
+  color: black;
+  background-image: url('../public/back1.jpg');
+}
+
+.homecontainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: start;
+  margin-top: 30vh;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.logincontainer{
+  display: grid;
+  grid-template-columns: 20vw;
+  background-color: #FF8E8E;
+  border: 1px solid #9F1919;
+  border-radius: 5px;
+  height: 60vh;
+  width: 25vw;
   justify-content: center;
   align-items: center;
-  color: black;
-  background-color: white;
+}
+.logincontainer label{
+  font-size: 20px;
+  display: block;
+  margin-top: 1vh;
+  color: #820A0A;
+}
+.logincontainer input{
+  margin-top: 5px;
+  width: 100%;
+  padding: 10px;
+  display: block;
+  background-color: #820A0A;
+  border: none;
+  color: #ffbebe;
+}
+.texthomecontainer{
+  z-index: 1;
+  background-color: black;
+  opacity: 0.6;
+  border-radius: 5px;
+}
+.hometext{
+  opacity: 1;
+}
+#loginbtn{
+  font-size: 20px;
+  margin-top: 7vh;
+  background: #031400;
+  color: #C9FFC0;
+  border-radius: 5px;
+}
+#loginbtn:hover{
+  background-color:#010800 ;
+  color: #8fd384;
+}
+.hometext h1{
+  font-size: 90px;
+  color: #DF4B4B;
+  margin: 10px;
+}
+.hometext h2{
+  color: #A05656;
+  font-size: 40px;
+  margin: 10px;
 }

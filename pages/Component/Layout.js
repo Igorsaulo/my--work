@@ -16,7 +16,7 @@ export default function Layout({ children }){
     return(
         <>
             {navbar}
-            <main className={styles.main}>{children}</main>
+            {children}
             <Footer/>
 
         </>

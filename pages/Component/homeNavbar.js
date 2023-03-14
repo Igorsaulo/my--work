@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import styles from '../../styles/Navbar.module.css'
+import styles from '../../styles/NavbarHome.module.css'
 import { useRouter } from "next/router";
 import Cookies from "js-cookie"
 
@@ -11,8 +11,13 @@ export default function HomeNavbar(){
 
     }
     return (
-        <nav className={styles.navbar}>
-        <h3>My-work</h3>
+        <nav className={styles.navbarhome}>
+            <div>
+                <p>My-Work</p>
+            </div>
+            <div className={styles.signbtn}>
+                <a href='/register'>Sigin</a>
+            </div>
         </nav>
     )
 }
