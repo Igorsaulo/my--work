@@ -1,31 +1,31 @@
-const { PrismaClient } = require('@prisma/client');
+import Database from "../global/database"
 
-const prisma = new PrismaClient();
+const database = new Database()
 export default async function  createFriend(req,res){
-    await prisma.$connect()
     const { method } = req
     switch (method){
+        case 'GET':
+        try {
+            const { id } = req.body
+            const user = await database.Get('Friends',id);
+            return res.status(200).json(user)
+
+        } catch (erro) {
+            console.log(erro)
+            return res.status(400).json(erro)
+        }
         case 'POST':
             try{
-                const {friendid,userid,blocked} = req.body
-                const friend = await prisma.Friends.create({data:{
-                    friendid,
-                    userid,
-                    blocked
-                }})
-                return res.status(201).json({ success: true})
+                const user = await database.Post('Friends',req.body)
+                return res.status(201).json({ success: true, data: user })
             }catch (error) {
                 console.log(error)
                 return res.status(400).json({ success: false })
         }
         case 'DELETE':
             try{
-                const {friendid} = req.body
-                await prisma.Friends.delete({
-                    where:{
-                        id,
-                    }
-                })
+                const { id } = req.body
+                await database.Delet('Friends',id)
                 return res.status(201).json({success:true})
             }catch(error){
                 res.status(400).json({success:false})

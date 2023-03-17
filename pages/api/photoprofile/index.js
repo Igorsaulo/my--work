@@ -1,17 +1,23 @@
 const { PrismaClient } = require('@prisma/client');
+import Database from '../global/database';
 
-const prisma = new PrismaClient();
+const database = new Database()
 export default async function  profilePhotos(req,res){
-    await prisma.$connect()
     const { method } = req
     switch (method){
+        case 'GET':
+            try {
+                const { id } = req.body
+                const photo = await database.Get('ProfilePhoto',id);
+                return res.status(200).json(photo)
+    
+            } catch (erro) {
+                console.log(erro)
+                return res.status(400).json(erro)
+            }
         case 'POST':
             try{
-                const {id,profilephoto} = req.body
-                const profilephotourl = await prisma.ProfilePhoto.create({data:{
-                    id,
-                    profilephoto
-                }})
+                const profilephotourl = await database.Post('ProfilePhoto',req.body)
                 return res.status(201).json({ success: true, url:profilephotourl })
             }catch (error) {
                 console.log(error)
@@ -20,14 +26,10 @@ export default async function  profilePhotos(req,res){
         case 'DELETE':
             try{
                 const {id} = req.body
-                await prisma.ProfilePhoto.delete({
-                    where:{
-                        id,
-                    }
-                })
+                await database.Delet('ProfilePhoto',id)
                 return res.status(201).json({success:true})
             }catch(error){
                 res.status(400).json({success:false})
             }
     }
-}
+};

@@ -8,5 +8,5 @@ function MyApp({ Component, pageProps }) {
     </Layout>
   )
 }
-
+prisma.$connect()
 export default MyApp
