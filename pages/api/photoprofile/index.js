@@ -1,4 +1,3 @@
-const { PrismaClient } = require('@prisma/client');
 import Database from '../global/database';
 
 const database = new Database()
