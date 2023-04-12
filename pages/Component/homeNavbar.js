@@ -13,7 +13,7 @@ export default function HomeNavbar(){
     return (
         <nav className={styles.navbarhome}>
             <div>
-                <p>My-Work</p>
+                <p>Generic</p>
             </div>
             <div className={styles.signbtn}>
                 <a href='/register'>Sigin</a>

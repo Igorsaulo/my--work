@@ -1,37 +1,40 @@
 import { PrismaClient } from "@prisma/client";
-const bcrypt = require ('bcrypt')
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient()
 export default class Database{
-    async Post(model,dados){
-        if(model === 'Users'){
-            const password = bcrypt.hashSync(dados.password,12)
-            const user = await prisma.Users.create({data:{
-                email:dados.email,
-                password:password,
-                username:dados.username
-            },})
-            return user
+    async Post(model, { email, password, username }) {
+        if (model === 'Users') {
+          const hashedPassword = bcrypt.hashSync(password, 12)
+          const user = await prisma.Users.create({
+            data: {
+              email,
+              password: hashedPassword,
+              username
+            },
+          })
+          return user
+        } else {
+          const objeto = await prisma[model].create({ data: { ...dados } })
+          return objeto
         }
-        else{
-            const objeto = await prisma[model].create({data:dados})
-            return objeto
-        }}
-
-    async Get(model,id){
+      }
+      
+      async Get(model, { id }) {
         const dados = await prisma[model].findMany({
-            where:{
-                id,
-            }
+          where: {
+            id,
+          }
         })
         return dados
-    }
-    async Delet(model,itemId){
+      }
+      
+      async Delet(model, { id }) {
         await prisma[model].delete({
-            where:{
-                id:itemId,
-            },
-        },)
+          where: {
+            id,
+          },
+        })
         return true
-    }
+      }      
 }

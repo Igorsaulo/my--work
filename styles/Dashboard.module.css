@@ -20,7 +20,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: black;
-    background-color: white;
+    color: #000000;
+    background-color: #FFE3E3;
     width: 85%;
   }

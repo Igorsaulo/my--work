@@ -31,6 +31,7 @@ export default function Inicio(){
     if(isAuthenticated){
         return (
             <>
+                <main className={styles.main}>
                 <div className={styles.serviceContainer}>
                 </div>
                 <div onClick={chatFunc}>
@@ -39,6 +40,7 @@ export default function Inicio(){
                 { chat && (
                     <Chatbox/>
                 )}
+                </main>
             </>
         )
     }

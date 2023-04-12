@@ -28,8 +28,8 @@ export default function Home(){
     <div className={styles.homecontainer}>
       <div className={styles.texthomecontainer}>
         <div className={styles.hometext}>
-          <h1>My Work</h1>
-          <h2>All work is fair</h2>
+          <h1>Generic Name</h1>
+          <h2>Generic Text</h2>
         </div>
       </div>
       <div className={styles.logincontainer}>
