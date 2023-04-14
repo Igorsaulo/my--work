@@ -3,13 +3,13 @@ const jwt = require('jsonwebtoken')
 import axios from "axios"
 import { useState, useEffect } from "react"
 import Chat from "../Component/Chat"
-import Chatbox from "../Component/chatbox"
 import styles from '../../styles/Dashboard.module.css'
 
 export default function Inicio(){
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [username, setUsername] = useState('');
     const [chat, setChat] = useState(false);
+    const chatId = 1;
 
     useEffect(() => {
         const coockie = Cookies.get('NextCoockie')
@@ -24,9 +24,6 @@ export default function Inicio(){
         }
     }, [])
 
-    const chatFunc = () => {
-        setChat(true)
-    }
 
     if(isAuthenticated){
         return (
@@ -34,12 +31,9 @@ export default function Inicio(){
                 <main className={styles.main}>
                 <div className={styles.serviceContainer}>
                 </div>
-                <div onClick={chatFunc}>
-                <Chat user={username} />
+                <div>
+                <Chat user={username} chatId={chatId} />
                 </div>
-                { chat && (
-                    <Chatbox/>
-                )}
                 </main>
             </>
         )

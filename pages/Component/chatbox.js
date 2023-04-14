@@ -6,7 +6,9 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 let socket
 
-export default function Chatbox() {
+export default function Chatbox(props) {
+  const { username, chatId} = props
+  console.log('aqui esta o username' + username);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState("");
 
@@ -42,6 +44,9 @@ export default function Chatbox() {
   return (
     <>
       <div className={styles.chatBox}>
+      <div>
+        <p>{username}</p>
+      </div>
         {messages.map((message) => (
           <div className={styles.boxtwo} style={message.user === "you" ? { display: "flex", justifyContent: "end", width: "100%" } : { justifyContent: "start", width: "100%" }}>
             <div style={message.user === "you" ? { backgroundColor: "rgba(41, 41, 41, 0.044)", width: `${message.message.length * 10}px`, padding: 5, margin: 3 } : { backgroundColor: "rgba(122, 127, 131, 0.412)", width: `${message.message.length * 10}px`, padding: 5, margin: 3 }}>

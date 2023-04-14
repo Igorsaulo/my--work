@@ -6,7 +6,7 @@
     position: fixed;
     align-items: center;
     background-color: #ffb3b3;
-    z-index: 2;
+    z-index: 3;
     border-bottom: 1px solid #c04f4f;
     color: #820A0A;
 }

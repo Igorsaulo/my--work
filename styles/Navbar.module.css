@@ -2,14 +2,57 @@
     background-color: #FF8E8E;
     color: white;
     width: 100%;
-    padding: 20px;
-    text-align: end;
+    height: 12vh;
     position: fixed;
     z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 3;
 
 }
 .navPhoto{
     background-color: white;
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
+    margin-right: 20px;
+    border-radius: 50%;
+  }
+  .navComponents{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0px 20px 0px 20px;
+  }
+  .navComponents input{
+    margin-left: 20px;
+  }
+  .searchButton{
+    background-color: #d85151;
+    border: 1px solid #c43c3c;
+    padding: 5px 10px 5px 10px;
+    border-radius: 2px;
+    outline:none;
+    color: #521010;
+  }
+  .searchButton::placeholder{
+    color: #521010;
+  }
+  .searchButton:focus{
+    background-color: #b63c3c;
+    color: #521010;
+  }
+  .menu{
+    position: fixed;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-row-gap: 5px;
+    background-color: #521010;
+    padding: 20px;
+    top: 10%;
+    right: 1%;
+    color: #f89292;
+  }
+  #linkbtn{
+    color: #521010;
   }

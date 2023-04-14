@@ -1,0 +1,45 @@
+.main {
+    min-height: 900px;
+    display: flex;
+    flex-direction: column;
+    color: #000000;
+    background-color: #FFE3E3;
+    width: 100%;
+  }
+
+.background{
+    width: 83%;
+    height: 44vh;
+    background-color: #000000;
+    margin-top: 12vh;
+    margin-left: 1%;
+}
+.pofilePhoto{
+    background-color: #944343;
+    height: 200px;
+    width: 200px;
+    border-radius: 50%;
+    top: 43%;
+    left: 5%;
+    position: absolute;
+    z-index: 2;
+}
+.username{
+    font-size: 36px;
+    margin-left: 22%;
+}
+.bio{
+    width: 70%;
+    margin-left: 5%;
+}
+.photoContainer{
+    width: 83%;
+    display: flex;
+    justify-content: center;
+}
+.photoContainerText{
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    width: 80%;
+    text-align: center;
+}
