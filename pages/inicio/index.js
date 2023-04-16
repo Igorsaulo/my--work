@@ -4,12 +4,14 @@ import axios from "axios"
 import { useState, useEffect } from "react"
 import Chat from "../Component/Chat"
 import styles from '../../styles/Dashboard.module.css'
+import AuthtenticationClient from "../../utils/authenticationClient"
 
 export default function Inicio(){
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [username, setUsername] = useState('');
     const [chat, setChat] = useState(false);
     const chatId = 1;
+
 
     useEffect(() => {
         const coockie = Cookies.get('NextCoockie')

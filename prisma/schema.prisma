@@ -12,6 +12,8 @@ model Users {
   email        String @unique
   password     String
   username     String
+  bio          String?
+  profilephoto String?
 }
 
 model Friends {
@@ -25,8 +27,4 @@ model Photo {
   id     String @id @default(auto()) @map("_id") @db.ObjectId
   userId String @db.ObjectId
   photo  String 
-}
-model ProfilePhoto{
-   id     String @id @map("_id") @db.ObjectId
-  profilephoto String
 }
