@@ -7,7 +7,8 @@ export default async function Users (req,res){
         case 'GET':
         try {
             const { id } = req.body
-            const users = await database.Get('Users',id);
+            console.log(` o id é ${id}`)
+            const users = await database.Get('Users',{id:id});
             return res.status(200).json(users)
 
         } catch (erro) {

@@ -16,6 +16,7 @@ export default async function Users (req,res){
                     email:email
                 }
             })
+            console.log(user)
             const comparar = bcrypt.compare(password,user.password)
             if(!comparar){
                 return res.status(422).json({msg:'Senha invalida'})
@@ -25,6 +26,7 @@ export default async function Users (req,res){
                 {
                     id:user.id,
                     username:user.username,
+                    profilephoto:user.profilephoto
                 },
                 secret,
                 {expiresIn: "1d"}

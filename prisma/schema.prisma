@@ -13,7 +13,7 @@ model Users {
   password     String
   username     String
   bio          String?
-  profilephoto String?
+  profilephoto String? @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
 }
 
 model Friends {

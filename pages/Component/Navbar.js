@@ -33,6 +33,7 @@ export default function Navbar(){
           <Link href='/profile'>Perfil</Link>
           <Link href='/account'>Conta</Link>
           <Link href='/config'>Configuração</Link>
+          <Link href='/' onClick={logOut()}>Logout</Link>
         </div>
       )}
         </nav>

@@ -21,11 +21,13 @@ export default class Database{
       }
       
       async Get(model, { id }) {
-        const dados = await prisma[model].findMany({
+        console.log(id)
+        const dados = await prisma[model].findUnique({
           where: {
             id,
           }
         })
+        console.log(dados)
         return dados
       }
       
@@ -36,5 +38,19 @@ export default class Database{
           },
         })
         return true
+      }
+      async Patch(model, { id, data }) {
+        console.log(data)
+        const updatedObjeto = await prisma[model].update({
+          where: {
+            id,
+          },
+          data: {
+            ...data,
+          },
+        });
+        console.log('ok')
+        console.log(updatedObjeto)
+        return updatedObjeto;
       }      
 }

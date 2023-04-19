@@ -8,7 +8,7 @@ export default function Login(req,res){
                 const token = req.body.token
                 jwt.verify(token,process.env.SECRET,(err,user)=>{
                     if (err){
-                        console.log('err')
+                        console.log(err)
                         return
                     }
                 res.status(200).json({auth:true ,dados:user})

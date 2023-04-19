@@ -15,7 +15,7 @@
     margin-left: 1%;
 }
 .pofilePhoto{
-    background-color: #944343;
+    background-color: #eca2a2;
     height: 200px;
     width: 200px;
     border-radius: 50%;
@@ -31,6 +31,9 @@
 }
 .pofilePhoto:hover{
     cursor: pointer;
+}
+.pofilePhoto img{
+    width: 70%;
 }
 .edit {
     opacity: 0;
@@ -71,4 +74,16 @@
     grid-row-gap: 2%;
     justify-content: center;
     margin-top: 2%;
+}
+.uploadBox{
+    position: absolute;
+    top: 33%;
+    left: 4%;
+    background-color: #521313;
+    height: 350px;
+    width: 77%;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 100% 100%;
 }
