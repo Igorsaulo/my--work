@@ -7,7 +7,6 @@ import { useState, useEffect } from "react"
 export default function Chat(props){
     const [chat, setChat] = useState(false);
     const {user,chatId} = props;
-    console.log(user.username)
     const chatFunc = () => {
         setChat(true)
     }

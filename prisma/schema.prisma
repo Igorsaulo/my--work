@@ -14,17 +14,7 @@ model Users {
   username     String
   bio          String?
   profilephoto String? @default("https://upload.wikimedia.org/wikipedia/commons/7/72/Default-welcomer.png")
-}
-
-model Friends {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  friendid String @db.ObjectId
-  userid   String @db.ObjectId
-  blocked  String
-}
-
-model Photo {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  photo  String 
+  friends Json?
+  blocked Json?
+  photos Json?
 }

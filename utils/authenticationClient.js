@@ -1,15 +1,14 @@
-import Cookies from "js-cookie"
 import axios from "axios"
 
-export default function AuthtenticationClient(){
-    const coockie = Cookies.get('NextCoockie')
+export async function AuthtenticationClient(coockie){
     if (coockie){
-        axios.post('/api/login',{token:coockie}).then(response =>{
-            const auth =response.data.auth
-            if(auth){
-                console.log(response.data.dados)
-                return {username:response.data.dados,isAuthenticated: true}
-            }
-        })
+        try {
+            const response = await axios.post('/api/login',{token:coockie});
+            const dados = response.data;
+            return dados;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
     }
 }

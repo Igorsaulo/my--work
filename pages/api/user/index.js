@@ -6,9 +6,9 @@ export default async function Users (req,res){
     switch (method){
         case 'PATCH':
         try {
-            const { id , profilephoto} = req.body
-            console.log(id)
-            const users = await database.Patch('Users',{id: id, data:{profilephoto:profilephoto}})
+            const { id,data} = req.body
+            console.log(data)
+            const users = await database.Patch('Users',{id:id ,data:data})
             return res.status(200).json(users)
 
         } catch (erro) {

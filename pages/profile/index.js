@@ -3,73 +3,50 @@ import Chat from '../Component/Chat';
 import CardPhoto from '../Component/PhotoCard';
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie"
-const jwt = require('jsonwebtoken')
 import axios from "axios"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelopeOpenText, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { uploadString,getStorage, listAll,ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../utils/firebase/firebase';
+import { AuthtenticationClient } from '../../utils/authenticationClient';
+import { profilePhoto } from '../../utils/profilePhoto';
 
 
 export default function Profile(){
 const [isAuthenticated, setIsAuthenticated] = useState(false);
 const [user, setUser] = useState();
-const [chat, setChat] = useState(false);
 const chatId = 1;
-const [imgUrl,setImgUrl] = useState();
-const [progress,setProgress] = useState();
-    
+const [photoedit,setPhotoedit] = useState(false);
+const [files, setFiles] = useState([]);
+const [photoupload,setPhotoupload] = useState(false);
 
-
-
-
-
-useEffect(() => {
+useEffect(async() => {
     const coockie = Cookies.get('NextCoockie');
-    if (coockie){
-      axios.post('/api/login', { token: coockie }).then(async response => {
-        const auth = response.data.auth;
-        if (auth) {
-           await photoProfile(response.data.dados)
-          setIsAuthenticated(true);
-        }
-      });
+    const dados = await AuthtenticationClient(coockie)
+    if(dados.auth){
+         const updateuser = await profilePhoto(dados.dados)
+         setUser(updateuser);
+        setIsAuthenticated(true);
+        await getFiles();
     }
   }, []);
   
-  const photoProfile = async (dados) => {
-    try {
-       const response = await axios.post('/api/photoprofile', { id: dados.id } );
-       const updatedUser = response.data;
-       console.log(updatedUser.profilephoto)
-       setUser(updatedUser);
-    } catch (error) {
-      console.error('Erro ao carregar perfil de usuário:', error);
-    }
-  };
   const handleUpload = async (event) => {
     event.preventDefault();
     const file = event.target[0]?.files[0];
     if (!file) return;
     const storageRef = ref(storage, `images/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const uploadTask = await uploadBytesResumable(storageRef, file);
     uploadTask.on(
         "state_changed",
-        snapshot => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setProgress(progress);
-        },
-        error => {
-            console.error(error);
-        },
         async () => {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
             try {
                 const userupdate = { id: user.id , profilephoto: downloadURL,email:user.email}
                 const response = await axios.patch(`/api/user`, userupdate);
                 const updatedUser = response.data;
                 console.log(updatedUser)
                 setUser(updatedUser);
+                setPhotoedit(false)
               } catch (error) {
                 console.error(error);
               }
@@ -77,7 +54,41 @@ useEffect(() => {
     );
 
 };
+const photosUpload = async (event) => {
+    event.preventDefault();
+    const file = event.target[0]?.files[0];
+    if (!file) return;
+    const storageRef = ref(storage, `${user.id}/${file.name}`);
+    const uploadTask = await uploadBytesResumable(storageRef, file);
+    const downloadURL = await getDownloadURL(storageRef);
+    const userupdate = { id: user.id, data:{ photos: { url: downloadURL } }};
+    const response = await axios.patch(`/api/user`, userupdate);
+    const updatedUser = response.data;
+    console.log(updatedUser)
+    setUser(updatedUser);
+    setPhotoupload(false)
+};
 
+const renderEdit= ()=>{
+    setPhotoedit(true)
+}
+const renderPload = ()=> setPhotoupload(true)
+
+const getFiles = async () => {
+    try {
+        const storageRef = ref(storage, `images/`);
+        const fileList = await listAll(storageRef);
+        const downloadUrls = await Promise.all(
+            fileList.items.map(async (item) => {
+            return await getDownloadURL(item);
+        })
+      );
+      setFiles(downloadUrls); 
+    } catch (error) {
+      console.error("Erro ao obter a lista de arquivos:", error);
+    }
+  };
+  const cancelEdit = ()=> setPhotoedit(false)
 if(isAuthenticated){
     return (
         <>
@@ -85,7 +96,7 @@ if(isAuthenticated){
                 <div className={styles.background}>
 
                 </div>
-                <div className={styles.pofilePhoto}>
+                <div onClick={renderEdit}  className={styles.pofilePhoto}>
                 <img src={user.profilephoto} />
                 </div>
                 <div className={styles.username}>
@@ -95,16 +106,19 @@ if(isAuthenticated){
                     <p>My text generic bio text rexr text rtexfadvb gddgbgg gdsgddgs gdsdsdg
                     sahshdgsdg gdgsdxg gdsbhdsbhdh dbdhgdjshs hdsjdsh hdshh usdhgsudh hdjshdsh hdsh</p>
                 </div>
-                <div className={styles.photoContainer}>
+                <div onClick={renderPload}  className={styles.photoContainer}>
                     <div className={styles.photoContainerText}>
                         <p>Albums</p>
                     </div>
                     <div className={styles.containerCards}>
-                        <CardPhoto/>
-                    </div>
+      {user.photos.map((photo, index) => (
+        <CardPhoto key={index} url={photo} /> // Crie um componente CardPhoto para cada URL
+      ))}
+    </div>
                 </div>
                 <Chat user={user} chatId={chatId} />
-                <div className={styles.uploadBox}>
+                { photoedit && (
+                    <div className={styles.uploadBox}>
                     <div>
 
                     </div>
@@ -112,9 +126,25 @@ if(isAuthenticated){
                         <form onSubmit={handleUpload}>
                             <input type="file" />
                             <button type='submit'>Enviar</button>
+                            <button type='button' onClick={cancelEdit}>X</button>
                         </form>
                     </div>
                 </div>
+                )}
+                { photoupload && (
+                    <div className={styles.uploadBox}>
+                    <div>
+
+                    </div>
+                    <div>
+                        <form onSubmit={photosUpload}>
+                            <input type="file" />
+                            <button type='submit'>Enviar</button>
+                            <button type='button' onClick={cancelEdit}>X</button>
+                        </form>
+                    </div>
+                </div>
+                )}
             </main>
         </>
     )
