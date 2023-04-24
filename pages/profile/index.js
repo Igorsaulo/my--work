@@ -41,8 +41,7 @@ useEffect(async () => {
 
   useEffect(()=>{
     if(user){
-        console.log(user.photos)
-        setListImages(compactToPagination(user?.photos, 6));
+        setListImages(compactToPagination(user.photos, 6));
     }
   },[user])
 
@@ -92,7 +91,7 @@ if(isAuthenticated){
                         <p>Albums</p>
                     </div>
                     <div className={styles.containerCards}>
-                        {user.photos.map((photo, index) => (
+                        {listImages[positionPage]?.map((photo, index) => (
                             <CardPhoto key={index} url={photo} />
                         ))}
                     </div>
