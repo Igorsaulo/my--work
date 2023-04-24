@@ -98,6 +98,10 @@ if(isAuthenticated){
                         ))}
                     </div>
                 </div>
+                <PaginationComponent
+                    pageCount={listImages?.length}
+                    onPageChange={(value) => setPositionPage(value.selected)}
+                />
                 <Chat user={user} chatId={chatId} />
                 { photoedit && (
                     <div className={styles.uploadBox}>
