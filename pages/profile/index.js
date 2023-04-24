@@ -3,9 +3,6 @@ import Chat from '../Component/Chat';
 import CardPhoto from '../Component/PhotoCard';
 import { useState, useEffect } from "react"
 import Cookies from "js-cookie"
-const jwt = require('jsonwebtoken')
-import axios from "axios"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../utils/firebase/firebase';
 import { AuthtenticationClient } from '../../utils/authenticationClient';
@@ -14,13 +11,14 @@ import {
     faEnvelopeOpenText,
     faPenToSquare,
   } from "@fortawesome/free-solid-svg-icons";
-  import { PaginationComponent } from "../Component/Pagination";
-  import { compactToPagination } from "../../utils/tratamentArrayFilterPagination";
+import { PaginationComponent } from "../Component/Pagination";
+import { compactToPagination } from "../../utils/tratamentArrayFilterPagination";
+import { Upload } from '../../utils/upload';
   
 
 
-
 export default function Profile(){
+    const upload = new Upload()
     const [listImages, setListImages] = useState([]);
     const [positionPage, setPositionPage] = useState(0);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,12 +27,8 @@ export default function Profile(){
     const [photoedit,setPhotoedit] = useState(false);
     const [files, setFiles] = useState([]);
     const [photoupload,setPhotoupload] = useState(false);
+
     
-
-
-
-
-
 useEffect(async () => {
     const coockie = Cookies.get('NextCoockie');
     const dados = await AuthtenticationClient(coockie)
@@ -42,87 +36,50 @@ useEffect(async () => {
         const updateuser = await profilePhoto(dados.dados)
         setUser(updateuser);
         setIsAuthenticated(true);
-        await getFiles();
-        // setListImages(compactToPagination(user.photos, 7));
-       
     }
-
-    // Versão demonstrativa, depois deve apagar esse array e setar no state os valores reais
   }, []);
+
+
   useEffect(()=>{
     if(user){
         setListImages(compactToPagination(user.photos, 7));
     }
   },[user])
+
+
   const handleUpload = async (event) => {
     event.preventDefault();
     const file = event.target[0]?.files[0];
     if (!file) return;
-    const storageRef = ref(storage, `images/${file.name}`);
-    const uploadTask = await uploadBytesResumable(storageRef, file);
-    uploadTask.on(
-        "state_changed",
-        async () => {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-            try {
-                const userupdate = { id: user.id , profilephoto: downloadURL,email:user.email}
-                const response = await axios.patch(`/api/user`, userupdate);
-                const updatedUser = response.data;
-                console.log(updatedUser)
-                setUser(updatedUser);
-                setPhotoedit(false)
-              } catch (error) {
-                console.error(error);
-              }
-        }
-    );
-
+    const updateuser = await upload.uploadPhoto(user,file,true)
+    setUser(updateuser);
+    setPhotoedit(false)
 };
+
+
 const photosUpload = async (event) => {
     event.preventDefault();
     const file = event.target[0]?.files[0];
     if (!file) return;
-    const storageRef = ref(storage, `${user.id}/${file.name}`);
-    const uploadTask = await uploadBytesResumable(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-    const userupdate = { id: user.id, data:{ photos: { url: downloadURL } }};
-    const response = await axios.patch(`/api/user`, userupdate);
-    const updatedUser = response.data;
-    console.log(updatedUser)
-    setUser(updatedUser);
+    const updateuser = await upload.uploadPhoto(user,file,false)
+    setUser(updateuser);
     setPhotoupload(false)
 };
 
-const renderEdit= ()=>{
-    setPhotoedit(true)
-}
-const renderPload = ()=> setPhotoupload(true)
 
-const getFiles = async () => {
-    try {
-        const storageRef = ref(storage, `images/`);
-        const fileList = await listAll(storageRef);
-        const downloadUrls = await Promise.all(
-            fileList.items.map(async (item) => {
-            return await getDownloadURL(item);
-        })
-      );
-      setFiles(downloadUrls); 
-    } catch (error) {
-      console.error("Erro ao obter a lista de arquivos:", error);
-    }
-  };
-  const cancelEdit = ()=> setPhotoedit(false)
+const renderEdit= ()=> setPhotoedit(true)
+const renderPload = ()=> setPhotoupload(true)
+const cancelEdit = ()=> setPhotoedit(false)
+
+
 if(isAuthenticated){
     return (
         <>
             <main className={styles.main}>
                 <div className={styles.background}>
-
                 </div>
                 <div onClick={renderEdit}  className={styles.pofilePhoto}>
-                <img src={user.profilephoto} />
+                    <img src={user.profilephoto} />
                 </div>
                 <div className={styles.username}>
                     <p>{user.username}</p>
@@ -136,10 +93,10 @@ if(isAuthenticated){
                         <p>Albums</p>
                     </div>
                     <div className={styles.containerCards}>
-      {user.photos.map((photo, index) => (
-        <CardPhoto key={index} url={photo} /> // Crie um componente CardPhoto para cada URL
-      ))}
-    </div>
+                        {user.photos.map((photo, index) => (
+                            <CardPhoto key={index} url={photo} />
+                        ))}
+                    </div>
                 </div>
                 <Chat user={user} chatId={chatId} />
                 { photoedit && (
