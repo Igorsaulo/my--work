@@ -39,13 +39,12 @@ useEffect(async () => {
     }
   }, []);
 
-
   useEffect(()=>{
     if(user){
-        setListImages(compactToPagination(user.photos, 7));
+        console.log(user.photos)
+        setListImages(compactToPagination(user?.photos, 6));
     }
   },[user])
-
 
   const handleUpload = async (event) => {
     event.preventDefault();
