@@ -1,13 +1,12 @@
-import styles from "../../styles/Chat.module.css";
-import Image from "next/image";
-import imagem from "../../public/315281570_1330066611099327_3957239708455660094_n.jpg";
-import Chatbox from "../Component/chatbox";
-import { useState, useEffect } from "react";
+import styles from '../../styles/Chat.module.css'
+import Image from 'next/image'
+import imagem from '../../public/315281570_1330066611099327_3957239708455660094_n.jpg'
+import Chatbox from "../Component/chatbox"
+import { useState, useEffect } from "react"
 
 export default function Chat(props){
     const [chat, setChat] = useState(false);
     const {user,chatId} = props;
-    console.log(user.username)
     const chatFunc = () => {
         setChat(true)
     }
