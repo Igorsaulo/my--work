@@ -5,12 +5,12 @@ import { AuthtenticationClient } from '../../utils/authenticationClient';
 import { useEffect } from 'react';
 
 export default async function Searchitens(props){
-    // const coockie = Cookies.get('NextCoockie');
-    // const myuser = await AuthtenticationClient(coockie)
+    const coockie = Cookies.get('NextCoockie');
+    const myuser = await AuthtenticationClient(coockie)
      const { user } = props
-    // async function requestFriend(id){
-    //     const response = await axios.patch('api/friends/add',{myuserid:myuser.dados.id, frienduserid: user.id})
-    // }
+    async function requestFriend(id){
+        const response = await axios.patch('api/friends/add',{myuserid:myuser.dados.id, frienduserid: user.id})
+    }
     return(
         <div className={styles.searchItem}>
                 <div className={styles.photoContainer}>
