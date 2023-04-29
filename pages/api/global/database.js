@@ -4,29 +4,33 @@ import bcrypt from 'bcrypt';
 const prisma = new PrismaClient()
 export default class Database{
     async Post(model, { email, password, username }) {
-        if (model === 'Users') {
-          const hashedPassword = bcrypt.hashSync(password, 12)
-          const user = await prisma.Users.create({
-            data: {
-              email,
-              password: hashedPassword,
-              username
-            },
+      if (password) password = bcrypt.hashSync(password, 12)
+          const user = await prisma[model].create({ data: { email, password, username},
           })
           return user
-        } else {
-          const objeto = await prisma[model].create({ data: { ...dados } })
-          return objeto
-        }
       }
-      
-      async Get(model, { id }) {
-        const dados = await prisma[model].findUnique({
-          where: {
-            id,
-          }
-        })
-        return dados
+      async Get(model, { id, username }) {
+        if( id ) {
+          const dados = await prisma[model].findUnique({
+             where: { id },
+             include:{
+              solicitacao: true,
+             },
+            })
+          return dados
+        }else if(username){
+          const dados = await prisma[model].findMany({
+            where: {
+              username: {
+                startsWith: username
+              }
+          }})
+          return dados
+        }
+        else{
+          const dados = await prisma[model].findMany()
+          return dados
+        }
       }
       
       async Delet(model, { id }) {
@@ -38,18 +42,18 @@ export default class Database{
         return true
       }
       async Patch(model, { id, data }) {
+        let userdados = await  this.Get(model,{id:id});
         if (data.photos){
-          let userdados = await  this.Get(model,{id:id});
-          userdados.photos.push(data.photos.url)
+          if (userdados.photos) userdados.photos.push(data.photos.url)
+          else userdados.photos = [data.photos.url,]
           data.photos = userdados.photos
-          console.log(data)
         };
         const updatedObjeto = await prisma[model].update({
           where: {
             id,
           },
           data: {
-            ...data,
+            ...data
           },
         });
         return updatedObjeto;

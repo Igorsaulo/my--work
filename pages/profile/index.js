@@ -36,12 +36,14 @@ useEffect(async () => {
         const updateuser = await profilePhoto(dados.dados)
         setUser(updateuser);
         setIsAuthenticated(true);
+       
     }
   }, []);
 
   useEffect(()=>{
     if(user){
         setListImages(compactToPagination(user.photos, 6));
+        console.log(user)
     }
   },[user])
 
