@@ -4,12 +4,17 @@ import Cookies from "js-cookie";
 import { AuthtenticationClient } from '../../utils/authenticationClient';
 import { useEffect } from 'react';
 
-export default async function Searchitens(props){
+export default  function Searchitens(props){
     const coockie = Cookies.get('NextCoockie');
-    const myuser = await AuthtenticationClient(coockie)
+    const myuser = async() =>{
+        const user = await AuthtenticationClient(coockie)
+        return user
+    }
      const { user } = props
-    async function requestFriend(id){
-        const response = await axios.patch('api/friends/add',{myuserid:myuser.dados.id, frienduserid: user.id})
+    async function requestFriend(){
+        const primarryuser = await myuser()
+        const myuserid = primarryuser.dados.id
+        const response = axios.patch('/api/friends/add',{myuserid:myuserid,frienduserid:user.id})
     }
     return(
         <div className={styles.searchItem}>

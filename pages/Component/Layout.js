@@ -1,7 +1,10 @@
 import Navbar from "./Navbar";
-import stilohome from '../../styles/Home.module.css'
 import Footer from "./Footer";
 import HomeNavbar from "./homeNavbar";
+import { useContext } from "react"
+import { AuthContext } from "../../contexts/AuthContext"
+import { useEffect } from "react"
+import Cookies from "js-cookie"
 
 export default function Layout({ children }){
     const name = children.type.name
@@ -14,12 +17,24 @@ export default function Layout({ children }){
             </>
         )
     }else{
-        return(
-            <>
-                <Navbar/>
-                {children}
-                <Footer/>
-            </>
-        )
+        const coockie = Cookies.get('NextCoockie')
+        const { user,auth } = useContext(AuthContext);
+        useEffect(()=>{
+            if(coockie) auth(coockie)
+        },[])
+        
+        if (user){
+            return(
+                <>
+                    <Navbar/>
+                    {children}
+                    <Footer/>
+                </>
+            )
+        }else{
+            return(
+                <h1>Privado</h1>
+            )
+        }
     }
 }

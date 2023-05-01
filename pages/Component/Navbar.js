@@ -16,9 +16,8 @@ export default function Navbar(){
     const {register ,handleSubmit } = useForm();
     async function searchUsernames(data){
         const response = await axios.post('/api/friends', { username: data.username } );
-        console.log(data.username)
+        console.log(response.data.data)
         setUsers(response.data.data)
-        setUsers(true)
         
     }
     function logOut(){
@@ -53,7 +52,7 @@ export default function Navbar(){
                         </div>
                     )}
             </nav>
-           { users && (
+            { users && (
             <SearchArea users={users} />
            )}
         </>

@@ -1,48 +1,23 @@
 import Cookies from "js-cookie"
-const jwt = require('jsonwebtoken')
-import axios from "axios"
-import { useState, useEffect } from "react"
 import Chat from "../Component/Chat"
 import styles from '../../styles/Dashboard.module.css'
-import AuthtenticationClient from "../../utils/authenticationClient"
+import { useContext } from "react"
+import { AuthContext } from "../../contexts/AuthContext"
 
 export default function Inicio(){
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [username, setUsername] = useState('');
-    const [chat, setChat] = useState(false);
+    const coockie = Cookies.get('NextCoockie')
+    const { user } = useContext(AuthContext);
     const chatId = 1;
 
-
-    useEffect(() => {
-        const coockie = Cookies.get('NextCoockie')
-        if (coockie){
-            axios.post('/api/login',{token:coockie}).then(response =>{
-                const auth =response.data.auth
-                if(auth){
-                    setUsername(response.data.dados)
-                    setIsAuthenticated(true)
-                }
-            })
-        }
-    }, [])
-
-
-    if(isAuthenticated){
         return (
             <>
                 <main className={styles.main}>
                 <div className={styles.serviceContainer}>
                 </div>
                 <div>
-                <Chat user={username} chatId={chatId} />
+                <Chat user={user} chatId ={chatId}/>
                 </div>
                 </main>
             </>
         )
-    }
-    else{
-        return(
-            <h1>Privado</h1>
-        )
-    }
 }
