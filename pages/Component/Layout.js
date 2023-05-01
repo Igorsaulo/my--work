@@ -5,9 +5,11 @@ import { useContext } from "react"
 import { AuthContext } from "../../contexts/AuthContext"
 import { useEffect } from "react"
 import Cookies from "js-cookie"
+import Chat from "./Chat";
 
 export default function Layout({ children }){
-    const name = children.type.name
+    const chatId = 1;
+    const name = children.type.name;
     if(name === 'Home'){
         return(
             <>
@@ -29,6 +31,7 @@ export default function Layout({ children }){
                     <Navbar/>
                     {children}
                     <Footer/>
+                    <Chat user={user} chatId ={chatId}/>
                 </>
             )
         }else{
