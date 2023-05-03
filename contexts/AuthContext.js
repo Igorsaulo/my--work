@@ -1,30 +1,24 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import Cookies from 'js-cookie';
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
 
 export const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  const auth = (coockie) =>{
+  const auth = async (coockie) =>{
     const decodedToken = jwt_decode(coockie);
-    setUser(decodedToken);
+    const userup = await axios.post('/api/photoprofile', {id: decodedToken.id})
+    console.log(userup.data)
+    setUser(userup.data);
   }
-  const login = (token) => {
-    Cookies.set('NextCookie', token, { expires: 1 });
-    const decodedToken = jwt_decode(token);
-    setUser(decodedToken);
-  };
-
-  const logout = () => {
-    Cookies.remove('NextCookie');
-    setUser(null);
-  };
-
+  const updateUser = (updateuser) =>{
+    setUser(updateuser)
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, auth }}>
+    <AuthContext.Provider value={{ user,updateUser, auth }}>
       {children}
     </AuthContext.Provider>
   );

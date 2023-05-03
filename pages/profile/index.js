@@ -1,12 +1,6 @@
 import styles from '../../styles/Profile.module.css'
-import Chat from '../Component/Chat';
 import CardPhoto from '../Component/PhotoCard';
-import { useState, useEffect } from "react"
-import Cookies from "js-cookie"
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../utils/firebase/firebase';
-import { AuthtenticationClient } from '../../utils/authenticationClient';
-import { profilePhoto } from '../../utils/profilePhoto';
+import { useState, useEffect, useContext } from "react"
 import {
     faEnvelopeOpenText,
     faPenToSquare,
@@ -14,6 +8,9 @@ import {
 import { PaginationComponent } from "../Component/Pagination";
 import { compactToPagination } from "../../utils/tratamentArrayFilterPagination";
 import { Upload } from '../../utils/upload';
+import { AuthContext } from '../../contexts/AuthContext';
+import Uploadform from '../Component/Uploadform';
+import Profileupload from '../Component/Profileupload';
   
 
 
@@ -21,58 +18,26 @@ export default function Profile(){
     const upload = new Upload()
     const [listImages, setListImages] = useState([]);
     const [positionPage, setPositionPage] = useState(0);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [user, setUser] = useState();
-    const chatId = 1;
+    const {user, updateUser } = useContext(AuthContext);
     const [photoedit,setPhotoedit] = useState(false);
-    const [files, setFiles] = useState([]);
-    const [photoupload,setPhotoupload] = useState(false);
+    const [ isVisible,setIsvisible] = useState(false);
+    const cancelPload = ()=> setIsvisible(false)
+    const renderPload = ()=> setIsvisible(true)
+    const renderEdit= ()=> setPhotoedit(true)
+    const cancelEdit = ()=> setPhotoedit(false)
 
-    
-useEffect(async () => {
-    const coockie = Cookies.get('NextCoockie');
-    const dados = await AuthtenticationClient(coockie)
-    if(dados.auth){
-        const updateuser = await profilePhoto(dados.dados)
-        setUser(updateuser);
-        setIsAuthenticated(true);
-       
-    }
-  }, []);
 
   useEffect(()=>{
     if(user){
         setListImages(compactToPagination(user.photos, 6));
-        console.log(user)
+        console.log(user.username)
     }
   },[user])
 
-  const handleUpload = async (event) => {
-    event.preventDefault();
-    const file = event.target[0]?.files[0];
-    if (!file) return;
-    const updateuser = await upload.uploadPhoto(user,file,true)
-    setUser(updateuser);
-    setPhotoedit(false)
-};
 
 
-const photosUpload = async (event) => {
-    event.preventDefault();
-    const file = event.target[0]?.files[0];
-    if (!file) return;
-    const updateuser = await upload.uploadPhoto(user,file,false)
-    setUser(updateuser);
-    setPhotoupload(false)
-};
 
-
-const renderEdit= ()=> setPhotoedit(true)
-const renderPload = ()=> setPhotoupload(true)
-const cancelEdit = ()=> setPhotoedit(false)
-
-
-if(isAuthenticated){
+if(user){
     return (
         <>
             <main className={styles.main}>
@@ -102,34 +67,17 @@ if(isAuthenticated){
                     pageCount={listImages?.length}
                     onPageChange={(value) => setPositionPage(value.selected)}
                 />
-                <Chat user={user} chatId={chatId} />
                 { photoedit && (
                     <div className={styles.uploadBox}>
-                    <div>
-
-                    </div>
-                    <div>
-                        <form onSubmit={handleUpload}>
-                            <input type="file" />
-                            <button type='submit'>Enviar</button>
-                            <button type='button' onClick={cancelEdit}>X</button>
-                        </form>
-                    </div>
+                    <Profileupload/>
+                    <button type='button' onClick={cancelEdit}>X</button>
                 </div>
                 )}
-                { photoupload && (
+                {isVisible && (
                     <div className={styles.uploadBox}>
-                    <div>
-
+                        <Uploadform/>
+                        <button type='button' onClick={cancelPload}>X</button>
                     </div>
-                    <div>
-                        <form onSubmit={photosUpload}>
-                            <input type="file" />
-                            <button type='submit'>Enviar</button>
-                            <button type='button' onClick={cancelEdit}>X</button>
-                        </form>
-                    </div>
-                </div>
                 )}
             </main>
         </>

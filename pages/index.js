@@ -7,21 +7,19 @@ import styles from '../styles/Home.module.css'
 
 export default function Home(){
   const [input, setInput] = useState('')
-
+  const [token,setToken] = useState()
   const router = useRouter();
   const { register, handleSubmit } = useForm();
   function push(){
     router.push('/inicio')
   }
-
   async function handleSigIn(data){
     axios.post('/api/auth', data).then(response => {
-      console.log(response.data.token);
       setCookie(response.data.token)
+      // setToken(response.data.token)
     });
     setTimeout(push,2500)
   }
-
   return (
     <>
     <main className={styles.main}>

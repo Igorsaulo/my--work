@@ -9,7 +9,7 @@ export default class Database{
           })
           return user
       }
-      async Get(model, { id, username }) {
+      async Get(model, { id, username,email }) {
         if( id ) {
           const dados = await prisma[model].findUnique({
              where: { id },
@@ -26,6 +26,14 @@ export default class Database{
               }
           }})
           return dados
+        }else if(email){
+          const dados = await prisma[model].findUnique({
+            where: { email },
+            include:{
+             solicitacao: true,
+            },
+           })
+         return dados
         }
         else{
           const dados = await prisma[model].findMany()

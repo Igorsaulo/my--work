@@ -6,9 +6,6 @@ export default function Inicio(){
             <main className={styles.main}>
                 <div className={styles.serviceContainer}>
                 </div>
-                <div>
-                   
-                </div>
             </main>
         </>
         )
