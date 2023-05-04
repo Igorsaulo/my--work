@@ -56,3 +56,27 @@
   #linkbtn{
     color: #521010;
   }
+  .notification{
+    position: absolute;
+    top: 83%;
+    left: 70%;
+    width: 27%;
+    height: 46vh;
+    display: flex;
+    background-color: rgb(53, 44, 44);
+    display: flex;
+    flex-direction: column;
+  }
+  .notificationContainer{
+    width: 100%;
+    height: 100%;
+    background-color: aliceblue;
+    overflow-y: auto;
+  }
+  .notificationItens{
+    width: 200px;
+    height: 40%;
+    margin-bottom: 10%;
+    background-color: rgb(24, 76, 122);
+    display: flex;
+  }

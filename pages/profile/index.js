@@ -26,17 +26,12 @@ export default function Profile(){
     const renderEdit= ()=> setPhotoedit(true)
     const cancelEdit = ()=> setPhotoedit(false)
 
-
   useEffect(()=>{
     if(user){
         setListImages(compactToPagination(user.photos, 6));
         console.log(user.username)
     }
   },[user])
-
-
-
-
 if(user){
     return (
         <>
