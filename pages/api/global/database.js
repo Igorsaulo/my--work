@@ -15,6 +15,7 @@ export default class Database{
              where: { id },
              include:{
               solicitacao: true,
+              friends:true,
              },
             })
           return dados
@@ -41,13 +42,15 @@ export default class Database{
         }
       }
       
-      async Delet(model, { id }) {
-        await prisma[model].delete({
-          where: {
-            id,
-          },
-        })
-        return true
+      async Delet(model, { id,solicitacaoId }) {
+        if(id){
+          await prisma[model].delete({
+            where: {
+              id,
+            },
+          })
+          return true
+        }
       }
       async Patch(model, { id, data }) {
         let userdados = await  this.Get(model,{id:id});
@@ -55,7 +58,26 @@ export default class Database{
           if (userdados.photos) userdados.photos.push(data.photos.url)
           else userdados.photos = [data.photos.url,]
           data.photos = userdados.photos
-        };
+        }
+        else if(data.solicitacaoId){
+          await this.updateFriend(data.friendId,id)
+          await prisma.users.update({
+            where: {
+              id,
+            },
+            data: {
+              friends: {
+                create: {
+                  friendId: data.friendId
+                }
+              },
+              solicitacao: {
+                delete: { id: data.solicitacaoId },
+              },
+            },
+          });
+          return true
+        }
         const updatedObjeto = await prisma[model].update({
           where: {
             id,
@@ -65,5 +87,33 @@ export default class Database{
           },
         });
         return updatedObjeto;
-      }      
+      }
+      async updateFriend(idFriend,myid){
+        const dados = await prisma.Users.findUnique({
+          where: { id:idFriend },
+          include:{
+           solicitacao: true,
+          },
+         })
+         dados.solicitacao.map( async (solicit)=>{
+          if(solicit.for === myid){
+            await prisma.users.update({
+              where: {
+                id:dados.id
+              },
+              data: {
+                friends: {
+                  create: {
+                    friendId: myid
+                  }
+                },
+                solicitacao: {
+                  delete: { id: solicit.id },
+                },
+              },
+            });
+          }
+         })
+         return true
+      }
 }

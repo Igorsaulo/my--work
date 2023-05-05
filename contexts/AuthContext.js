@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const auth = async (coockie) =>{
     const decodedToken = jwt_decode(coockie);
     const userup = await axios.post('/api/photoprofile', {id: decodedToken.id})
-    console.log(userup.data)
     setUser(userup.data);
   }
   const updateUser = (updateuser) =>{

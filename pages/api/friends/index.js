@@ -42,18 +42,12 @@ export default async function  createFriend(req,res){
             }
     case 'PATCH':
         try {
-            const { myuserid,frienduserid } = req.body
-            console.log(myuserid, frienduserid)
-            data = {
-                solicitacao: {
-                    remetente: myuserid,
-                    frienduserid: frienduserid,
-                    status: 'pendente'
-                }
-            }
-            const user = await database.Patch('Users',{id:myuserid ,data:data})
-            const userFriendUser = await database.Patch('Users',{id:frienduserid ,data:data})
-            console.log(id)
+            const { myuserid,frienduserid,solicitacaoId } = req.body
+            console.log(req.body)
+            const user = await database.Patch('Users',{id:myuserid ,data:{
+                solicitacaoId:solicitacaoId,
+                friendId:frienduserid
+            }})
             return res.status(200).json({sucess:true})
 
         } catch (erro) {

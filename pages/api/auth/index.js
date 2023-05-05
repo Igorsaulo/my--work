@@ -21,12 +21,6 @@ export default async function Users (req,res){
             const token = jwt.sign(
                 {
                     id:user.id,
-                    // username:user.username,
-                    // profilephoto:user.profilephoto,
-                    // friends: user.friends,
-                    // blocked: user.blocked,
-                    // photos: user.photos,
-                    // solicitacao: user.solicitacao
                 },
                 secret,
                 {expiresIn: "1d"}

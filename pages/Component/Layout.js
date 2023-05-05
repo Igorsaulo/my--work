@@ -18,7 +18,16 @@ export default function Layout({ children }){
                 <Footer/>
             </>
         )
-    }else{
+    } else if(name === 'Resgister'){
+        return(
+            <>
+                 <Navbar/>
+                {children}
+                <Footer/>
+            </>
+        )
+    }
+    else{
         const coockie = Cookies.get('NextCoockie')
         const { user,auth } = useContext(AuthContext);
         useEffect(()=>{
@@ -26,6 +35,9 @@ export default function Layout({ children }){
         },[])
         
         if (user){
+            user.friends.map((friends)=>{
+                console.log(friends)
+            })
             return(
                 <>
                     <Navbar/>

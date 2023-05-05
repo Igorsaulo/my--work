@@ -11,6 +11,7 @@ import SearchArea from "./Searcharea";
 import { useForm } from "react-hook-form"
 import axios from "axios"
 import { Badge } from '@material-ui/core';
+import Solicitaitens from './Solicitaitens';
 
 
 export default function Navbar(){
@@ -25,7 +26,6 @@ export default function Navbar(){
     const {register ,handleSubmit } = useForm();
     async function searchUsernames(data){
         const response = await axios.post('/api/friends', { username: data.username } );
-        console.log(response.data.data)
         setUsers(response.data.data)
         
     }
@@ -35,20 +35,15 @@ export default function Navbar(){
 
     }
     useEffect(()=>{
-        // if(user){
-        //     user.solicitacao.map((solicit)=>{
-        //         if(solicit.remetente != user.id) setConvites(solicit.remetente);
-        //     })
         if (user) {
             const novosConvites = user.solicitacao
               .filter(solici => solici.remetente !== user.id)
-              .map(solici => solici.remetente);
+              .map(solici => solici);
             setConvites(convitesAntigos => [...convitesAntigos, ...novosConvites]);
           }
     },[user])
     useEffect(()=>{
             setCount(convites.length)
-            console.log(convites)
     },[convites])
     return (
         <>
@@ -77,12 +72,11 @@ export default function Navbar(){
                 </div>
                 {solicitacao && (
                     <div className={styles.notification}>
-                        <h3>Notificações</h3>
+                        <h3>Pedidos</h3>
                         <div className={styles.notificationContainer}>
-                            <div  className={styles.notificationItens}>Item 1</div>
-                            <div className={styles.notificationItens}>Item 2</div>
-                            <div className={styles.notificationItens}>Item 2</div>
-                            <div className={styles.notificationItens}>Item 2</div>
+                           {convites?.map((convite)=>{
+                            return <Solicitaitens userId={convite}/>
+                           })}
                         </div>                      
                     </div>
                 )}
